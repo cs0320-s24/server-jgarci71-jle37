@@ -1,4 +1,4 @@
-package edu.brown.cs.student.main;
+package src.main.java.edu.brown.cs.student.strategy;
 
 import java.util.List;
 

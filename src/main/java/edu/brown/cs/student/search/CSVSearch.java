@@ -1,5 +1,10 @@
-package edu.brown.cs.student.main;
+package src.main.java.edu.brown.cs.student.search;
 
+import src.main.java.edu.brown.cs.student.strategy.CreatorFromRow;
+import src.main.java.edu.brown.cs.student.strategy.FactoryFailureException;
+import src.main.java.edu.brown.cs.student.parse.CSVParser;
+
+import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +21,7 @@ public class CSVSearch<T> {
    * @param token
    * @return
    */
-  public List<List<String>> searcher(Reader reader, String token) {
+  public List<List<String>> searcher(Reader reader, String token) throws IOException, FactoryFailureException {
     useHeader = false;
     searchToken = token;
     myObject = new SearchObject();
@@ -31,7 +36,7 @@ public class CSVSearch<T> {
    * @param headerName
    * @return
    */
-  public List<List<String>> searcher(Reader reader, String token, String headerName) {
+  public List<List<String>> searcher(Reader reader, String token, String headerName) throws IOException, FactoryFailureException {
     useHeader = true;
     searchToken = token;
     myObject = new SearchObject();
@@ -52,7 +57,7 @@ public class CSVSearch<T> {
    * @param headerIndex
    * @return
    */
-  public List<List<String>> searcher(Reader reader, String token, int headerIndex) {
+  public List<List<String>> searcher(Reader reader, String token, int headerIndex) throws IOException, FactoryFailureException {
     useHeader = true;
     searchToken = token;
     myObject = new SearchObject();
@@ -65,9 +70,9 @@ public class CSVSearch<T> {
    * @param reader
    * @return
    */
-  public List<List<String>> getParsed(Reader reader) {
-    CSVParser<List<String>> myParse = new CSVParser<>();
-    return myParse.parser(reader, myObject);
+  public List<List<String>> getParsed(Reader reader) throws IOException, FactoryFailureException {
+    CSVParser<List<String>> myParse = new CSVParser<>(reader, myObject);
+    return myParse.getResults();
   }
 
   /**

@@ -1,7 +1,4 @@
-package src.main.java.edu.brown.cs.student.parse;
-
-import src.main.java.edu.brown.cs.student.strategy.FactoryFailureException;
-import src.main.java.edu.brown.cs.student.strategy.CreatorFromRow;
+package edu.brown.cs.student.parse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +6,8 @@ import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
+import edu.brown.cs.student.strategy.CreatorFromRow;
+import edu.brown.cs.student.strategy.FactoryFailureException;
 
 /**
  * This is my generic CSV Parser.

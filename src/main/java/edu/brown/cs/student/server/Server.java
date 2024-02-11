@@ -1,9 +1,10 @@
-package src.main.java.edu.brown.cs.student.server;
-
-import src.main.java.edu.brown.cs.student.search.CSVSearch;
+package edu.brown.cs.student.server;
 
 import java.io.FileNotFoundException;
-import java.util.List;
+
+import spark.Spark;
+
+import static spark.Spark.after;
 
 /** The Main class of our project. This is where execution begins. */
 public final class Server {
@@ -18,24 +19,25 @@ public final class Server {
 
   private Server(String[] args) {}
 
-  private void run() throws FileNotFoundException {
-    // dear student: you can remove this. you can remove anything. you're in cs32. you're free!
-    System.out.println(
-        "Your horoscope for this project:\n"
-            + "Entrust in th.//e Strategy pattern, and it shall give thee the sovereignty to "
-            + "decide and the dexterity to change direction in the realm of thy code.");
+  private void run() {
+    // start up a port
+    int port = 3443;
+    Spark.port(port);
+    // set up the shared dataclass
+    CSVState currentState = new CSVState();
 
-    CSVSearch<List<String>> mySearch = new CSVSearch<>();
-    //    FileReader fileReader =
-    //        new FileReader(
-    //            "C:/Users/jenni/OneDrive/Desktop/CS320/csv-ailee37/data/local/frfhaisuf.csv");
-    //    for (List<String> result :
-    //        mySearch.searcher(
-    //            new FileReader(
-    //
-    // "C:/Users/jenni/OneDrive/Desktop/CS320/csv-ailee37/data/malformed/malformed_signs.csv"),
-    //            "Fruit")) {
-    //      System.out.println(result);
-//        }
+    // cors headers
+    after(
+            (request, response) -> {
+              response.header("Acess-Control-Allow-Origin", "*");
+              response.header("Access-Control-Allow-Methods", "*");
+            }
+    );
+    // set up the 4 different endpoints and handlers
+    //    Spark.get("csvload", )
+    Spark.init();
+    Spark.awaitInitialization();
+    // printing out instructions
+    System.out.println("Server started at http://localhose:" + port);
   }
 }

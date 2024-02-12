@@ -1,13 +1,13 @@
-package edu.brown.cs.student.parse;
+package edu.brown.cs.student.main.parse;
 
+import edu.brown.cs.student.main.strategy.CreatorFromRow;
+import edu.brown.cs.student.main.strategy.FactoryFailureException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
-import edu.brown.cs.student.strategy.CreatorFromRow;
-import edu.brown.cs.student.strategy.FactoryFailureException;
 
 /**
  * This is my generic CSV Parser.

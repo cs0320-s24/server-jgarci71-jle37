@@ -1,47 +1,45 @@
-package edu.brown.cs.student.search;
+package edu.brown.cs.student.main.search;
 
+import edu.brown.cs.student.main.strategy.CreatorFromRow;
+import edu.brown.cs.student.main.strategy.FactoryFailureException;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import edu.brown.cs.student.parse.CSVParser;
-import edu.brown.cs.student.strategy.CreatorFromRow;
-import edu.brown.cs.student.strategy.FactoryFailureException;
 
 public class CSVSearch<T> {
   private boolean useHeader;
-  private String searchToken;
+  private final String searchToken;
   CreatorFromRow<List<String>> myObject;
+
+  private List<List<String>> loadResults;
+
+  public CSVSearch(List<List<String>> results, String token) {
+    loadResults = results;
+    searchToken = token;
+    myObject = new SearchObject();
+  }
 
   /**
    * constructor/method for search (used when header is unspecified)
    *
-   * @param reader
-   * @param token
    * @return
    */
-  public List<List<String>> searcher(Reader reader, String token)
-      throws IOException, FactoryFailureException {
+  public List<List<String>> searcher() throws IOException, FactoryFailureException {
     useHeader = false;
-    searchToken = token;
-    myObject = new SearchObject();
-    return getLists(getParsed(reader), -1);
+    return getLists(loadResults, -1);
   }
 
   /**
    * alternative constructor/method for search using String header
    *
-   * @param reader
-   * @param token
    * @param headerName
    * @return
    */
-  public List<List<String>> searcher(Reader reader, String token, String headerName)
+  public List<List<String>> searcher(String headerName)
       throws IOException, FactoryFailureException {
     useHeader = true;
-    searchToken = token;
     myObject = new SearchObject();
-    List<List<String>> parsedList = getParsed(reader);
+    List<List<String>> parsedList = loadResults;
     for (int i = 0; i < parsedList.get(0).size(); i++) {
       if (parsedList.get(0).get(i).equalsIgnoreCase(headerName)) {
         return getLists(parsedList, i);
@@ -53,28 +51,13 @@ public class CSVSearch<T> {
   /**
    * alternative constructor/method for search using column index
    *
-   * @param reader
-   * @param token
    * @param headerIndex
    * @return
    */
-  public List<List<String>> searcher(Reader reader, String token, int headerIndex)
-      throws IOException, FactoryFailureException {
+  public List<List<String>> searcher(int headerIndex) throws IOException, FactoryFailureException {
     useHeader = true;
-    searchToken = token;
     myObject = new SearchObject();
-    return getLists(getParsed(reader), headerIndex);
-  }
-
-  /**
-   * helper method that calls parser in the CSVParser class
-   *
-   * @param reader
-   * @return
-   */
-  public List<List<String>> getParsed(Reader reader) throws IOException, FactoryFailureException {
-    CSVParser<List<String>> myParse = new CSVParser<>(reader, myObject);
-    return myParse.getResults();
+    return getLists(loadResults, headerIndex);
   }
 
   /**

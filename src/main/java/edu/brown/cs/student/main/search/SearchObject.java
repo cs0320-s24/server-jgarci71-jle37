@@ -1,8 +1,8 @@
-package edu.brown.cs.student.search;
+package edu.brown.cs.student.main.search;
 
+import edu.brown.cs.student.main.strategy.CreatorFromRow;
+import edu.brown.cs.student.main.strategy.FactoryFailureException;
 import java.util.List;
-import edu.brown.cs.student.strategy.CreatorFromRow;
-import edu.brown.cs.student.strategy.FactoryFailureException;
 
 public class SearchObject implements CreatorFromRow<List<String>> {
   public SearchObject() {}

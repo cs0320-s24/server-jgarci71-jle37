@@ -1,4 +1,4 @@
-package edu.brown.cs.student.strategy;
+package edu.brown.cs.student.main.strategy;
 
 import java.util.ArrayList;
 import java.util.List;

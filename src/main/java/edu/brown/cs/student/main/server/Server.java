@@ -1,13 +1,12 @@
-package edu.brown.cs.student.server;
-
-import java.io.FileNotFoundException;
-
-import spark.Spark;
+package edu.brown.cs.student.main.server;
 
 import static spark.Spark.after;
 
+import java.io.FileNotFoundException;
+import spark.Spark;
+
 /** The Main class of our project. This is where execution begins. */
-public final class Server {
+public class Server {
   /**
    * The initial method called when execution begins.
    *
@@ -16,12 +15,10 @@ public final class Server {
   public static void main(String[] args) throws FileNotFoundException {
     new Server(args).run();
   }
+
   static CSVState currentState;
 
-  private Server(String[] args) {
-
-  }
-
+  private Server(String[] args) {}
 
   private void run() {
     // start up a port
@@ -32,11 +29,10 @@ public final class Server {
 
     // cors headers
     after(
-            (request, response) -> {
-              response.header("Access-Control-Allow-Origin", "*");
-              response.header("Access-Control-Allow-Methods", "*");
-            }
-    );
+        (request, response) -> {
+          response.header("Access-Control-Allow-Origin", "*");
+          response.header("Access-Control-Allow-Methods", "*");
+        });
     // set up the 4 different endpoints and handlers
     Spark.get("csvload", new LoadCSVHandler(currentState));
     Spark.get("csvsearch", new SearchCSVHandler(currentState));

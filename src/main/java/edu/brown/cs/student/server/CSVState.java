@@ -9,7 +9,7 @@ public class CSVState {
     private List<List<String>> loadResults = new ArrayList<>();
     private State currState = State.EMPTY;
 
-    private enum State{
+    public enum State{
         LOADED, FAILED, EMPTY;
     }
 
@@ -29,6 +29,10 @@ public class CSVState {
 
     public void setResults(List<List<String>> results){
         this.loadResults = results;
+    }
+
+    public State getState(){
+        return this.currState;
     }
 
 }

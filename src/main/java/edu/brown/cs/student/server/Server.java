@@ -16,28 +16,34 @@ public final class Server {
   public static void main(String[] args) throws FileNotFoundException {
     new Server(args).run();
   }
+  static CSVState currentState;
 
-  private Server(String[] args) {}
+  private Server(String[] args) {
+
+  }
+
 
   private void run() {
     // start up a port
     int port = 3443;
     Spark.port(port);
     // set up the shared dataclass
-    CSVState currentState = new CSVState();
+    currentState = new CSVState();
 
     // cors headers
     after(
             (request, response) -> {
-              response.header("Acess-Control-Allow-Origin", "*");
+              response.header("Access-Control-Allow-Origin", "*");
               response.header("Access-Control-Allow-Methods", "*");
             }
     );
     // set up the 4 different endpoints and handlers
-    //    Spark.get("csvload", )
+    Spark.get("csvload", new LoadCSVHandler(currentState));
+    Spark.get("csvsearch", new SearchCSVHandler(currentState));
+    Spark.get("csvview", new ViewCSVHandler(currentState));
     Spark.init();
     Spark.awaitInitialization();
     // printing out instructions
-    System.out.println("Server started at http://localhose:" + port);
+    System.out.println("Server started at http://localhost:" + port);
   }
 }

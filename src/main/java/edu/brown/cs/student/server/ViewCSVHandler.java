@@ -5,7 +5,7 @@ import spark.Response;
 import spark.Route;
 
 public class ViewCSVHandler implements Route {
-    private CSVState state;
+    private final CSVState state;
 
     public ViewCSVHandler(CSVState state) {
         this.state = state;

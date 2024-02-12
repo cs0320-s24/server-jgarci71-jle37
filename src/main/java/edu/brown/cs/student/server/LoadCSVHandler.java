@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class LoadCSVHandler implements Route {
 
-    private CSVState state;
+    private final CSVState state;
 
     public LoadCSVHandler(CSVState state) {
         this.state = state;

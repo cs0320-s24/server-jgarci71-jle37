@@ -35,4 +35,11 @@ public class CSVState {
         return this.currState;
     }
 
+    public String getFilePath(){
+        return this.filePath;
+    }
+
+    public List<List<String>> getLoadResults() {
+        return this.loadResults;
+    }
 }

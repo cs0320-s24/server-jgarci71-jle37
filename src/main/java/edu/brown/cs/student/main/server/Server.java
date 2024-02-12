@@ -20,7 +20,7 @@ public class Server {
 
   private Server(String[] args) {}
 
-  private void run() {
+  public void run() {
     // start up a port
     int port = 3443;
     Spark.port(port);
@@ -34,12 +34,15 @@ public class Server {
           response.header("Access-Control-Allow-Methods", "*");
         });
     // set up the 4 different endpoints and handlers
+    System.out.println("something is going wrong down here");
     Spark.get("csvload", new LoadCSVHandler(currentState));
     Spark.get("csvsearch", new SearchCSVHandler(currentState));
     Spark.get("csvview", new ViewCSVHandler(currentState));
+    System.out.println("or down here");
     Spark.init();
+    System.out.println("or here");
     Spark.awaitInitialization();
-    // printing out instructions
+    System.out.println("here");
     System.out.println("Server started at http://localhost:" + port);
   }
 }

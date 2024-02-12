@@ -14,9 +14,12 @@ public class ViewCSVHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         if(this.state.getState() == CSVState.State.LOADED) {
-            //return a success response map with all the data.
+            System.out.println("yayyy it worked");
+            //make success response here
+            //response map should map data to all the rows
         } else {
-            //return a failure response map
+            System.out.println("you need to load");
+            //response map should map filepath to the path
         }
         return "this is working as expected";
     }

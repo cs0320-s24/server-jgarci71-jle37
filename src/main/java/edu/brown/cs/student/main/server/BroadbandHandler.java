@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main.server;
 
 import edu.brown.cs.student.main.server.BroadbandSuccessResponse.BroadbandResponseData;
+import java.util.Date;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -28,12 +29,16 @@ public class BroadbandHandler implements Route {
       //          System.out.print(s + ", ");
       //        }
       //      }
+      Date timeRequested = new Date();
       return new BroadbandSuccessResponse(
-              new BroadbandResponseData(stateName, countyName, theResponse[1][1]))
+              new BroadbandResponseData(
+                  stateName, countyName, theResponse[1][1], timeRequested.toString()))
           .serialize();
     } catch (IllegalArgumentException e) {
+      Date timeRequested = new Date();
       return new BroadbandFailResponse(
-              new BroadbandResponseData(stateName, countyName, e.getMessage()))
+              new BroadbandResponseData(
+                  stateName, countyName, e.getMessage(), timeRequested.toString()))
           .serialize();
     }
   }

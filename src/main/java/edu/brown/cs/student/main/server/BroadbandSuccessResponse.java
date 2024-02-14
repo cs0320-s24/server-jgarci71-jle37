@@ -5,7 +5,8 @@ import com.squareup.moshi.Moshi;
 
 public record BroadbandSuccessResponse(String response_type, BroadbandResponseData responseMap) {
 
-  public record BroadbandResponseData(String state, String county, String percentage) {}
+  public record BroadbandResponseData(
+      String state, String county, String percentage, String timeRequested) {}
 
   public BroadbandSuccessResponse(BroadbandResponseData data) {
     this("success", data);

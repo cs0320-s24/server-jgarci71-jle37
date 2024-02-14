@@ -1,4 +1,5 @@
 package edu.brown.cs.student.main.server;
+
 import edu.brown.cs.student.main.search.CSVSearch;
 import edu.brown.cs.student.main.server.SearchViewSuccessResponse.SearchViewResponseData;
 import java.io.IOException;

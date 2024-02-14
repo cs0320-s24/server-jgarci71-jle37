@@ -17,15 +17,23 @@ public class Server {
   }
 
   static CSVState currentState;
+  static ACSAPI currentAPI;
 
   private Server(String[] args) {}
 
   public void run() {
+    // FIX THESE EXCEPTIONSSSSSS @JUAN @ANNA (they came from acsapi)
+
     // start up a port
     int port = 3443;
     Spark.port(port);
     // set up the shared dataclass
     currentState = new CSVState();
+    try {
+      currentAPI = new ACSAPI();
+    } catch (Exception e) {
+      System.out.println("api error");
+    }
 
     // cors headers
     after(
@@ -33,16 +41,14 @@ public class Server {
           response.header("Access-Control-Allow-Origin", "*");
           response.header("Access-Control-Allow-Methods", "*");
         });
-    // set up the 4 different endpoints and handlers
-    System.out.println("something is going wrong down here");
+
     Spark.get("csvload", new LoadCSVHandler(currentState));
     Spark.get("csvsearch", new SearchCSVHandler(currentState));
     Spark.get("csvview", new ViewCSVHandler(currentState));
-    System.out.println("or down here");
+    Spark.get("broadband", new BroadbandHandler(currentAPI));
     Spark.init();
-    System.out.println("or here");
     Spark.awaitInitialization();
-    System.out.println("here");
+
     System.out.println("Server started at http://localhost:" + port);
   }
 }

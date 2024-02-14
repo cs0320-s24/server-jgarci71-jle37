@@ -9,7 +9,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class ACSAPI {
 
@@ -21,8 +20,8 @@ public class ACSAPI {
 
   private HashMap<String, String> mapify(String[][] stateMap) {
     HashMap<String, String> ret = new HashMap<>();
-    for(String[] stateCountyPair : stateMap){
-       ret.put(stateCountyPair[0].toLowerCase(), stateCountyPair[1].toLowerCase());
+    for (String[] stateCountyPair : stateMap) {
+      ret.put(stateCountyPair[0].toLowerCase(), stateCountyPair[1].toLowerCase());
     }
     ret.put("*", "*");
     return ret;
@@ -58,19 +57,22 @@ public class ACSAPI {
   }
 
   public String[][] query(String state, String county) throws IllegalArgumentException {
-    //need to error check this call
+    // need to error check this call
+    if (state.isEmpty()) {
+      throw new IllegalArgumentException("State is missing");
+    }
     String stateID = this.stateData.getOrDefault(state.toLowerCase(), null);
 
-    if(stateID == null){
+    if (stateID == null) {
       throw new IllegalArgumentException("StateID is missing");
     }
-    String countyID = this.getCountyCode(stateID, county.toLowerCase());
-    if(countyID == null){
-      //county not found
-      throw new IllegalArgumentException("County not found in state: " + state);
+    if (county.isEmpty()) {
+      throw new IllegalArgumentException("County is missing");
     }
+    String countyID = this.getCountyCode(stateID, county.toLowerCase());
 
-//    https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:*&in=state:06
+    //
+    // https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:*&in=state:06
     try {
       HttpRequest censusApiRequest =
           HttpRequest.newBuilder()
@@ -93,12 +95,13 @@ public class ACSAPI {
 
       return this.deserialize(censusApiResponse.body());
     } catch (URISyntaxException | IOException | InterruptedException e) {
+      e.printStackTrace();
       throw new IllegalArgumentException();
     }
   }
 
   private String getCountyCode(String stateID, String county) {
-    if(county.equals("*")){
+    if (county.equals("*")) {
       return county;
     }
     try {
@@ -119,14 +122,14 @@ public class ACSAPI {
 
       String[][] stateData = this.deserialize(censusApiResponse.body());
 
-      for(String[] countyStateThruple : stateData){
-        if(countyStateThruple[0].toLowerCase().contains(county)){
+      for (String[] countyStateThruple : stateData) {
+        if (countyStateThruple[0].toLowerCase().contains(county)) {
           return countyStateThruple[2];
         }
       }
     } catch (URISyntaxException | IOException | InterruptedException e) {
       e.printStackTrace();
     }
-    throw new IllegalArgumentException("County Not Found in Broadband Data");
+    throw new IllegalArgumentException("County Not Found in State");
   }
 }

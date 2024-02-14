@@ -27,6 +27,6 @@ public class BroadbandHandler implements Route {
     }
 
     String[][] theResponse = this.api.query(stateName, countyName);
-    return null;
+    return theResponse[1][1];
   }
 }

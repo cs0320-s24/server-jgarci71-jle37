@@ -28,7 +28,7 @@ public class ACSAPI {
     return ret;
   }
 
-  public static String[][] deserialize(String rawStateCode) {
+  private String[][] deserialize(String rawStateCode) {
     try {
       Moshi moshi = new Moshi.Builder().build();
       JsonAdapter<String[][]> adapter = moshi.adapter(String[][].class);
@@ -42,7 +42,6 @@ public class ACSAPI {
 
   private String sendRequest() throws URISyntaxException, IOException, InterruptedException {
     // Build a request to this BoredAPI. Try out this link in your browser, what do you see?
-    // TODO 1: Looking at the documentation, how can we add to the URI to query based
     // on participant number?
     HttpRequest censusApiRequest =
         HttpRequest.newBuilder()
@@ -55,16 +54,58 @@ public class ACSAPI {
         HttpClient.newBuilder()
             .build()
             .send(censusApiRequest, HttpResponse.BodyHandlers.ofString());
-
-    // What's the difference between these two lines? Why do we return the body? What is useful from
-    // the raw response (hint: how can we use the status of response)?
-    System.out.println(censusApiResponse);
-    System.out.println(censusApiResponse.body());
-
     return censusApiResponse.body();
   }
 
   public String[][] query(String state, String county) {
-      return new String[1][1];
+    String stateID = this.stateData.get(state);
+    String countyID = this.getCountyCode(stateID, county);
+//    https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:*&in=state:06
+    try {
+      HttpRequest censusApiRequest =
+              HttpRequest.newBuilder()
+                      .uri(new URI("https://api.census.gov/data/2021/acs/acs1/subject/variables" +
+                              "?get=NAME,S2802_C03_022E&" +
+                              "for=county:" + countyID +
+                              "&in=state:" + stateID))
+                      .GET()
+                      .build();
+
+      // Send that API request then store the response in this variable. Note the generic type.
+      HttpResponse<String> censusApiResponse =
+              HttpClient.newBuilder()
+                      .build()
+                      .send(censusApiRequest, HttpResponse.BodyHandlers.ofString());
+      return this.deserialize(censusApiResponse.body());
+    } catch (URISyntaxException | IOException | InterruptedException e) {
+      e.printStackTrace();
+    }
+    return new String[1][1];
+  }
+
+  private String getCountyCode(String stateID, String county) {
+    try {
+      HttpRequest censusApiRequest =
+              HttpRequest.newBuilder()
+                      .uri(new URI("https://api.census.gov/data/2010/dec/sf1?get=NAME&for=county:*&in=state:" + stateID))
+                      .GET()
+                      .build();
+
+      // Send that API request then store the response in this variable. Note the generic type.
+      HttpResponse<String> censusApiResponse =
+              HttpClient.newBuilder()
+                      .build()
+                      .send(censusApiRequest, HttpResponse.BodyHandlers.ofString());
+      String[][] stateData = this.deserialize(censusApiResponse.body());
+      for(String[] countyStateThruple : stateData){
+        if(countyStateThruple[0].contains(county)){
+          return countyStateThruple[2];
+        }
+      }
+      return "";
+    } catch (URISyntaxException | IOException | InterruptedException e) {
+      e.printStackTrace();
+    }
+    return "";
   }
 }

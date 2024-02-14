@@ -12,11 +12,20 @@ import java.util.HashMap;
 
 public class ACSAPI {
 
-  private final String[][] stateData;
+  private final HashMap<String, String> stateData;
 
   public ACSAPI() throws URISyntaxException, IOException, InterruptedException {
-    this.stateData = deserialize(sendRequest());
+    this.stateData = this.mapify(deserialize(sendRequest()));
     System.out.println(stateData);
+  }
+
+  private HashMap<String, String> mapify(String[][] stateMap) {
+    HashMap<String, String> ret = new HashMap<>();
+
+    for(String[] stateCountyPair : stateMap){
+       ret.put(stateCountyPair[0], stateCountyPair[1]);
+    }
+    return ret;
   }
 
   public static String[][] deserialize(String rawStateCode) {
@@ -53,5 +62,9 @@ public class ACSAPI {
     System.out.println(censusApiResponse.body());
 
     return censusApiResponse.body();
+  }
+
+  public String[][] query(String state, String county) {
+      return new String[1][1];
   }
 }

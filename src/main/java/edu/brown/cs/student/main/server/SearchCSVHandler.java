@@ -1,7 +1,7 @@
 package edu.brown.cs.student.main.server;
 
 import edu.brown.cs.student.main.search.CSVSearch;
-import edu.brown.cs.student.main.server.SearchViewSuccessResponse.SearchViewResponseData;
+import edu.brown.cs.student.main.server.SearchSuccessResponse.SearchResponseData;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +38,13 @@ public class SearchCSVHandler implements Route {
       }
       this.state.fileSuccess();
       this.state.setFilePath(path);
-      return new SearchViewSuccessResponse(new SearchViewResponseData(path, results)).serialize();
+      return new SearchSuccessResponse(
+              new SearchResponseData(path, searchToken, targetColumn, results))
+          .serialize();
     } catch (IOException e) {
-      return new SearchViewFailResponse(new SearchViewResponseData(path, results)).serialize();
+      return new SearchFailResponse(
+              new SearchResponseData(path, searchToken, targetColumn, results))
+          .serialize();
     } catch (NumberFormatException e) {
       this.state.setResults(
           new CSVSearch<>(this.state.getLoadResults(), searchToken).searcher(targetColumn));

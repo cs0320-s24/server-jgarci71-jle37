@@ -22,8 +22,8 @@ public class ACSAPI {
   private HashMap<String, String> mapify(String[][] stateMap) {
     HashMap<String, String> ret = new HashMap<>();
 
-    for(String[] stateCountyPair : stateMap){
-       ret.put(stateCountyPair[0], stateCountyPair[1]);
+    for (String[] stateCountyPair : stateMap) {
+      ret.put(stateCountyPair[0], stateCountyPair[1]);
     }
     return ret;
   }
@@ -60,22 +60,27 @@ public class ACSAPI {
   public String[][] query(String state, String county) {
     String stateID = this.stateData.get(state);
     String countyID = this.getCountyCode(stateID, county);
-//    https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:*&in=state:06
+    //
+    // https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:*&in=state:06
     try {
       HttpRequest censusApiRequest =
-              HttpRequest.newBuilder()
-                      .uri(new URI("https://api.census.gov/data/2021/acs/acs1/subject/variables" +
-                              "?get=NAME,S2802_C03_022E&" +
-                              "for=county:" + countyID +
-                              "&in=state:" + stateID))
-                      .GET()
-                      .build();
+          HttpRequest.newBuilder()
+              .uri(
+                  new URI(
+                      "https://api.census.gov/data/2021/acs/acs1/subject/variables"
+                          + "?get=NAME,S2802_C03_022E&"
+                          + "for=county:"
+                          + countyID
+                          + "&in=state:"
+                          + stateID))
+              .GET()
+              .build();
 
       // Send that API request then store the response in this variable. Note the generic type.
       HttpResponse<String> censusApiResponse =
-              HttpClient.newBuilder()
-                      .build()
-                      .send(censusApiRequest, HttpResponse.BodyHandlers.ofString());
+          HttpClient.newBuilder()
+              .build()
+              .send(censusApiRequest, HttpResponse.BodyHandlers.ofString());
       return this.deserialize(censusApiResponse.body());
     } catch (URISyntaxException | IOException | InterruptedException e) {
       e.printStackTrace();
@@ -86,19 +91,22 @@ public class ACSAPI {
   private String getCountyCode(String stateID, String county) {
     try {
       HttpRequest censusApiRequest =
-              HttpRequest.newBuilder()
-                      .uri(new URI("https://api.census.gov/data/2010/dec/sf1?get=NAME&for=county:*&in=state:" + stateID))
-                      .GET()
-                      .build();
+          HttpRequest.newBuilder()
+              .uri(
+                  new URI(
+                      "https://api.census.gov/data/2010/dec/sf1?get=NAME&for=county:*&in=state:"
+                          + stateID))
+              .GET()
+              .build();
 
       // Send that API request then store the response in this variable. Note the generic type.
       HttpResponse<String> censusApiResponse =
-              HttpClient.newBuilder()
-                      .build()
-                      .send(censusApiRequest, HttpResponse.BodyHandlers.ofString());
+          HttpClient.newBuilder()
+              .build()
+              .send(censusApiRequest, HttpResponse.BodyHandlers.ofString());
       String[][] stateData = this.deserialize(censusApiResponse.body());
-      for(String[] countyStateThruple : stateData){
-        if(countyStateThruple[0].contains(county)){
+      for (String[] countyStateThruple : stateData) {
+        if (countyStateThruple[0].contains(county)) {
           return countyStateThruple[2];
         }
       }

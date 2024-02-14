@@ -15,14 +15,13 @@ public class ViewCSVHandler implements Route {
   @Override
   public Object handle(Request request, Response response) throws Exception {
     if (this.state.getState() == CSVState.State.LOADED) {
-      return new SearchViewSuccessResponse(
-              new SearchViewSuccessResponse.SearchViewResponseData(
+      return new ViewSuccessResponse(
+              new ViewSuccessResponse.ViewResponseData(
                   this.state.getFilePath(), this.state.getLoadResults()))
           .serialize();
     } else {
-      return new SearchViewFailResponse(
-              new SearchViewSuccessResponse.SearchViewResponseData(
-                  this.state.getFilePath(), new ArrayList<>()))
+      return new ViewFailResponse(
+              new ViewSuccessResponse.ViewResponseData(this.state.getFilePath(), new ArrayList<>()))
           .serialize();
     }
   }

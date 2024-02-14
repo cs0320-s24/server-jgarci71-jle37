@@ -14,17 +14,19 @@ public class BroadbandHandler implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
-    String state = request.queryParams("state");
-    String county = request.queryParams("county");
+      String stateName = request.queryParams("state");
+      String countyName = request.queryParams("county");
+      //if county does not exist throw error
+      //if county is not given then do all counties
 
-    if(county == null){
+    if(countyName == null){
       //fail response, missing arguments: county
     }
-    if (state == null){
+    if (stateName == null){
       //fail response, missing arguments:
     }
 
-    String[][] theResponse = this.api.query(state, county);
+    String[][] theResponse = this.api.query(stateName, countyName);
     return null;
   }
 }

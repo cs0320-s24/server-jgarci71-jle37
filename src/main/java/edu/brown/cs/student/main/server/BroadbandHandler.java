@@ -14,6 +14,10 @@ public class BroadbandHandler implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
+    String stateName = request.queryParams("state");
+    String countyName = request.queryParams("county");
+    //if county does not exist throw error
+    //if county is not given then do all counties
     return null;
   }
 }

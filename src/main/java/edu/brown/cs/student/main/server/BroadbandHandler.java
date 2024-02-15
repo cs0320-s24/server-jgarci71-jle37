@@ -8,9 +8,9 @@ import spark.Route;
 
 public class BroadbandHandler implements Route {
 
-  private final ACSAPI api;
+  private final ACSDatasource api;
 
-  public BroadbandHandler(ACSAPI api) {
+  public BroadbandHandler(ACSDatasource api) {
     this.api = api;
   }
 
@@ -32,7 +32,7 @@ public class BroadbandHandler implements Route {
       Date timeRequested = new Date();
       return new BroadbandSuccessResponse(
               new BroadbandResponseData(
-                  stateName, countyName, theResponse[1][1], timeRequested.toString()))
+                  theResponse[1][0].split(",")[1], theResponse[1][0].split(",")[0], theResponse[1][1], timeRequested.toString()))
           .serialize();
     } catch (IllegalArgumentException e) {
       Date timeRequested = new Date();

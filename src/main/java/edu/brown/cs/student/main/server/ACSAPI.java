@@ -10,7 +10,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 
-public class ACSAPI {
+public class ACSAPI implements ACSDatasource {
 
   private final HashMap<String, String> stateData;
 
@@ -56,6 +56,7 @@ public class ACSAPI {
     return censusApiResponse.body();
   }
 
+  @Override
   public String[][] query(String state, String county) throws IllegalArgumentException {
     // need to error check this call
     if (state.isEmpty()) {

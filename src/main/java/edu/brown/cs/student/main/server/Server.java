@@ -3,6 +3,8 @@ package edu.brown.cs.student.main.server;
 import static spark.Spark.after;
 
 import java.io.FileNotFoundException;
+import java.util.concurrent.TimeUnit;
+
 import spark.Spark;
 
 /** The Main class of our project. This is where execution begins. */
@@ -17,20 +19,18 @@ public class Server {
   }
 
   static CSVState currentState;
-  static ACSAPI currentAPI;
+  static ACSDatasource currentAPI;
 
   private Server(String[] args) {}
 
   public void run() {
-    // FIX THESE EXCEPTIONSSSSSS @JUAN @ANNA (they came from acsapi)
-
     // start up a port
     int port = 3443;
     Spark.port(port);
     // set up the shared dataclass
     currentState = new CSVState();
     try {
-      currentAPI = new ACSAPI();
+      currentAPI = new ACSAPIwithCache(200, 20, TimeUnit.MINUTES);
     } catch (Exception e) {
       System.out.println("api error");
     }

@@ -12,10 +12,16 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This is a proxy class that wraps an ACD DataSource. This gives our caching proxy the ability to wrap a real API or a
+ * mock API.
+ */
 public class ACSAPIwithCache implements ACSDatasource {
 
-  private final ACSDatasource apiwithcache;
+  private final ACSDatasource wrappedAPI;
   private final LoadingCache<StateCountyPair, String[][]> cache;
+
+  //our fallback method when the data is not found in the cache.
   private CacheLoader<StateCountyPair, String[][]> loader =
       new CacheLoader<StateCountyPair, String[][]>() {
         @Override
@@ -24,27 +30,57 @@ public class ACSAPIwithCache implements ACSDatasource {
         }
       };
 
+  /**
+   * (NOT RECOMMENDED) Instantiates a cache with no expiration or maximum size limit.
+   * @throws URISyntaxException
+   * @throws IOException
+   * @throws InterruptedException
+   */
   public ACSAPIwithCache() throws URISyntaxException, IOException, InterruptedException {
-    this.apiwithcache = new ACSAPI();
+    this.wrappedAPI = new ACSAPI();
     this.cache = CacheBuilder.newBuilder().build(loader);
   }
 
+  /**
+   * Instantiates an ACSAPI with a limit of max size items.
+   * @param maxSize number of items the cache can hold at most.
+   * @throws URISyntaxException
+   * @throws IOException
+   * @throws InterruptedException
+   */
   public ACSAPIwithCache(long maxSize)
       throws URISyntaxException, IOException, InterruptedException {
-    this.apiwithcache = new ACSAPI();
+    this.wrappedAPI = new ACSAPI();
     this.cache = CacheBuilder.newBuilder().maximumSize(maxSize).build(loader);
   }
 
+  /**
+   * Instantiates a cache with an expiration after write.
+   * @param expireAfterWrite when should items expire
+   * @param durationType time unit
+   * @throws URISyntaxException
+   * @throws IOException
+   * @throws InterruptedException
+   */
   public ACSAPIwithCache(long expireAfterWrite, TimeUnit durationType)
       throws URISyntaxException, IOException, InterruptedException {
-    this.apiwithcache = new ACSAPI();
+    this.wrappedAPI = new ACSAPI();
     this.cache =
         CacheBuilder.newBuilder().expireAfterWrite(expireAfterWrite, durationType).build(loader);
   }
 
+  /**
+   * Instantiates an API with both a size limit and an expiration time.
+   * @param maxSize
+   * @param expireAfterWrite
+   * @param durationType
+   * @throws URISyntaxException
+   * @throws IOException
+   * @throws InterruptedException
+   */
   public ACSAPIwithCache(long maxSize, long expireAfterWrite, TimeUnit durationType)
       throws URISyntaxException, IOException, InterruptedException {
-    this.apiwithcache = new ACSAPI();
+    this.wrappedAPI = new ACSAPI();
     this.cache =
         CacheBuilder.newBuilder()
             .expireAfterWrite(expireAfterWrite, durationType)
@@ -52,8 +88,16 @@ public class ACSAPIwithCache implements ACSDatasource {
             .build(loader);
   }
 
+  /**
+   * Instantiates a cache, as well as an ACSDatasource to use. This is helpful for using a MockDatasource to perform
+   * queries.
+   * @param apiToWrap
+   * @param maxSize
+   * @param expireAfterWrite
+   * @param durationType
+   */
   public ACSAPIwithCache(ACSDatasource apiToWrap, long maxSize, long expireAfterWrite, TimeUnit durationType){
-    this.apiwithcache = apiToWrap;
+    this.wrappedAPI = apiToWrap;
     this.cache =
             CacheBuilder.newBuilder()
                     .expireAfterWrite(expireAfterWrite, durationType)
@@ -61,11 +105,26 @@ public class ACSAPIwithCache implements ACSDatasource {
                     .build(loader);
   }
 
+  /**
+   * Calls the wrapped ACSDatasource's query method
+   * @param state
+   * @param county
+   * @return
+   * @throws IllegalArgumentException
+   * @throws ExecutionException
+   */
   public String[][] nonCachedQuery(String state, String county) throws IllegalArgumentException, ExecutionException {
-    System.out.println("performing a non chached query");
-    return this.apiwithcache.query(state, county);
+    return this.wrappedAPI.query(state, county);
   }
 
+  /**
+   * Searches the cache for the state county pair.
+   * @param state
+   * @param county
+   * @return
+   * @throws IllegalArgumentException
+   * @throws ExecutionException
+   */
   public String[][] query(String state, String county)
       throws IllegalArgumentException, ExecutionException {
     return this.cache.get(new StateCountyPair(state.toLowerCase(), county.toLowerCase()));

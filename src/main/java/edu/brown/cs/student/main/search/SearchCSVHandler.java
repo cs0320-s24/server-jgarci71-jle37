@@ -1,13 +1,17 @@
 package edu.brown.cs.student.main.search;
 
-import edu.brown.cs.student.main.server.CSVState;
 import edu.brown.cs.student.main.search.SearchSuccessResponse.SearchResponseData;
+import edu.brown.cs.student.main.server.CSVState;
 import java.util.ArrayList;
 import java.util.List;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * This is the handler for the "/csvsearch" endpoint. It takes in a filepath, search token,
+ * and column header to perform a search with given the expected parameters.
+ */
 public class SearchCSVHandler implements Route {
   private final CSVState state;
 
@@ -15,12 +19,19 @@ public class SearchCSVHandler implements Route {
     this.state = state;
   }
 
+  /**
+   * Takes in queries and calls on CSVsearch to retrieve a list of rows
+   *
+   * @param request
+   * @param response
+   * @return a searchsuccessresponse or searchfailresponse
+   * @throws Exception
+   */
   @Override
   public Object handle(Request request, Response response) throws Exception {
     // here we will call our parse,
     List<List<String>> results = new ArrayList<>();
 
-    //    String filePath = request.queryParams("file");
     String path = this.state.getFilePath();
     String searchToken = request.queryParams("token");
     String targetColumn = request.queryParams("column");

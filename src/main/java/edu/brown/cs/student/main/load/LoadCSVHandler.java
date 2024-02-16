@@ -4,14 +4,16 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import edu.brown.cs.student.main.parse.CSVParser;
 import edu.brown.cs.student.main.search.SearchObject;
+import edu.brown.cs.student.main.server.CSVState;
 import java.io.FileReader;
 import java.util.List;
-
-import edu.brown.cs.student.main.server.CSVState;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * This is the handler for the "/csvload" endpoint. It takes in a filepath to parse/load.
+ */
 public class LoadCSVHandler implements Route {
 
   private final CSVState state;
@@ -22,6 +24,10 @@ public class LoadCSVHandler implements Route {
 
   public record LoadResponseData(String filepath) {}
 
+  /**
+   * Represents a successful response for a csvload endpoint call. Returns a success response type
+   * with the expected data.
+   */
   public record LoadSuccessResponse(String response_type, LoadResponseData responseMap) {
     public LoadSuccessResponse(LoadResponseData data) {
       this("success", data);
@@ -39,6 +45,9 @@ public class LoadCSVHandler implements Route {
     }
   }
 
+  /**
+   * Represents a failure response for a csvload endpoint call.
+   */
   public record LoadFailResponse(String response_type, LoadResponseData responseMap) {
     public LoadFailResponse(LoadResponseData data) {
       this("error", data);
@@ -56,6 +65,14 @@ public class LoadCSVHandler implements Route {
     }
   }
 
+  /**
+   * Requests a filepath query to load from user adn calls on parse
+   *
+   * @param request
+   * @param response
+   * @return either loadfailresponse or loadsuccessresponse
+   * @throws Exception
+   */
   @Override
   public Object handle(Request request, Response response) throws Exception {
     // here we will call our parse,

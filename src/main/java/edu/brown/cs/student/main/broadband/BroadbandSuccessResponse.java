@@ -18,6 +18,7 @@ public record BroadbandSuccessResponse(String response_type, BroadbandResponseDa
 
   /**
    * Converts th BroadBandSuccessResponse into a JSON representation.
+   *
    * @return
    */
   String serialize() {

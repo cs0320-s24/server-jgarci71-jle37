@@ -8,8 +8,8 @@ import spark.Response;
 import spark.Route;
 
 /**
- * This is the handler for the "/broadband" endpoint. It takes in a datasource to perform queries with given the
- * expected parameters.
+ * This is the handler for the "/broadband" endpoint. It takes in a datasource to perform queries
+ * with given the expected parameters.
  */
 public class BroadbandHandler implements Route {
 
@@ -21,6 +21,7 @@ public class BroadbandHandler implements Route {
 
   /**
    * Calls on the ACSDataSource to perform a query
+   *
    * @param request
    * @param response
    * @return either a BroadBandFailResponse or a BroadBandSuccessResponse

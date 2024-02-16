@@ -9,7 +9,7 @@ public class CSVSearch<T> {
   private final String searchToken;
   CreatorFromRow<List<String>> myObject;
 
-  private List<List<String>> loadResults;
+  private final List<List<String>> loadResults;
 
   public CSVSearch(List<List<String>> results, String token) {
     loadResults = results;
@@ -20,7 +20,7 @@ public class CSVSearch<T> {
   /**
    * constructor/method for search (used when header is unspecified)
    *
-   * @return
+   * @return rows containing token
    */
   public List<List<String>> searcher() {
     useHeader = false;
@@ -31,7 +31,7 @@ public class CSVSearch<T> {
    * alternative constructor/method for search using String header
    *
    * @param headerName
-   * @return
+   * @return rows containing token
    */
   public List<List<String>> searcher(String headerName) {
     useHeader = true;
@@ -49,7 +49,7 @@ public class CSVSearch<T> {
    * alternative constructor/method for search using column index
    *
    * @param headerIndex
-   * @return
+   * @return rows containing token
    */
   public List<List<String>> searcher(int headerIndex) {
     useHeader = true;
@@ -63,7 +63,7 @@ public class CSVSearch<T> {
    *
    * @param rows
    * @param columnIndex
-   * @return
+   * @return rows containing token
    */
   public List<List<String>> getLists(List<List<String>> rows, int columnIndex) {
     List<List<String>> results = new ArrayList<>();

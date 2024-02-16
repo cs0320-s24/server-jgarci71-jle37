@@ -4,6 +4,10 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import java.util.List;
 
+/**
+ * Represents a successful response for a csvsearch endpoint call. Returns a success response type
+ * with the expected data.
+ */
 public record SearchSuccessResponse(String response_type, SearchResponseData responseMap) {
 
   public record SearchResponseData(
@@ -13,6 +17,10 @@ public record SearchSuccessResponse(String response_type, SearchResponseData res
     this("success", data);
   }
 
+  /**
+   * This converts the record into a JSON representation
+   * @return a JSON
+   */
   String serialize() {
     try {
       Moshi moshi = new Moshi.Builder().build();

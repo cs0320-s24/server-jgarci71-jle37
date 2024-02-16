@@ -1,8 +1,7 @@
 package edu.brown.cs.student.main.view;
 
-import java.util.ArrayList;
-
 import edu.brown.cs.student.main.server.CSVState;
+import java.util.ArrayList;
 import spark.Request;
 import spark.Response;
 import spark.Route;

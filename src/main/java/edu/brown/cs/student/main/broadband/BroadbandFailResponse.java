@@ -4,9 +4,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import edu.brown.cs.student.main.broadband.BroadbandSuccessResponse.BroadbandResponseData;
 
-/**
- * Represents a Fail response for the broadband handler.
- */
+/** Represents a Fail response for the broadband handler. */
 public record BroadbandFailResponse(String response_type, BroadbandResponseData responseData) {
 
   public BroadbandFailResponse(BroadbandResponseData data) {
@@ -15,6 +13,7 @@ public record BroadbandFailResponse(String response_type, BroadbandResponseData 
 
   /**
    * Converts the record into a JSON representation.
+   *
    * @return
    */
   String serialize() {

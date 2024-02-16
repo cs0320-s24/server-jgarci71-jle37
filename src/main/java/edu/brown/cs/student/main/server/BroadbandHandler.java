@@ -18,9 +18,21 @@ public class BroadbandHandler implements Route {
   public Object handle(Request request, Response response) throws Exception {
     String stateName = request.queryParams("state");
     String countyName = request.queryParams("county");
+    Date timeRequested = new Date();
     // if county does not exist throw error
     // if county is not given then do all counties
-
+    if (stateName == null) {
+      return new BroadbandFailResponse(
+              new BroadbandResponseData(
+                  "missing stateName", "unparsed", "stateName is null", timeRequested.toString()))
+          .serialize();
+    }
+    if (countyName == null) {
+      return new BroadbandFailResponse(
+              new BroadbandResponseData(
+                  stateName, "missing", "countyName is null", timeRequested.toString()))
+          .serialize();
+    }
     try {
       String[][] theResponse = this.api.query(stateName, countyName);
       //      for (String[] lis : theResponse) {
@@ -29,7 +41,6 @@ public class BroadbandHandler implements Route {
       //          System.out.print(s + ", ");
       //        }
       //      }
-      Date timeRequested = new Date();
       return new BroadbandSuccessResponse(
               new BroadbandResponseData(
                   theResponse[1][0].split(",")[1],
@@ -38,7 +49,6 @@ public class BroadbandHandler implements Route {
                   timeRequested.toString()))
           .serialize();
     } catch (IllegalArgumentException e) {
-      Date timeRequested = new Date();
       return new BroadbandFailResponse(
               new BroadbandResponseData(
                   stateName, countyName, e.getMessage(), timeRequested.toString()))

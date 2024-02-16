@@ -124,7 +124,7 @@ public class TestSearchCSVHandler {
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
     assertEquals(0, response.responseData().data().size());
 
-    System.out.println(response);
+    //    System.out.println(response);
     assertEquals("error", response.response_type());
     // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
     // a real Json reply.
@@ -154,7 +154,7 @@ public class TestSearchCSVHandler {
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
     //    assertEquals(0, response.responseData().data().size());
 
-    System.out.println(response);
+    //    System.out.println(response);
     assertEquals(0, response.responseMap().data().size());
     assertEquals("success", response.response_type());
     // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
@@ -184,9 +184,8 @@ public class TestSearchCSVHandler {
         moshi
             .adapter(SearchSuccessResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
-    //    assertEquals(0, response.responseData().data().size());
 
-    System.out.println(response);
+    //    System.out.println(response);
     assertEquals(0, response.responseMap().data().size());
     assertEquals("success", response.response_type());
     // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
@@ -217,7 +216,7 @@ public class TestSearchCSVHandler {
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
     //    assertEquals(0, response.responseData().data().size());
 
-    System.out.println(response);
+    //    System.out.println(response);
 
     assertEquals(40, response.responseMap().data().size());
     assertEquals("success", response.response_type());
@@ -249,7 +248,7 @@ public class TestSearchCSVHandler {
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
     //    assertEquals(0, response.responseData().data().size());
 
-    System.out.println(response);
+    //    System.out.println(response);
 
     assertEquals(40, response.responseMap().data().size());
     assertEquals("success", response.response_type());
@@ -281,7 +280,7 @@ public class TestSearchCSVHandler {
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
     //    assertEquals(0, response.responseData().data().size());
 
-    System.out.println(response);
+    //    System.out.println(response);
 
     assertEquals(40, response.responseMap().data().size());
     assertEquals("success", response.response_type());

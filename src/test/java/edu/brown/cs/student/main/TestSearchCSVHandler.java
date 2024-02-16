@@ -112,35 +112,26 @@ public class TestSearchCSVHandler {
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testSearchBeforeLoad() throws IOException {
     HttpURLConnection clientConnection =
         tryRequest("csvsearch?file=census/income_by_race.csv&token=total&column=1");
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     SearchFailResponse response =
         moshi
             .adapter(SearchFailResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
-    assertEquals(0, response.responseData().data().size());
 
-    //    System.out.println(response);
+    assertEquals(0, response.responseData().data().size());
     assertEquals("error_datasource", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
 
     clientConnection.disconnect();
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testSearchNotFoundInColumn() throws IOException {
     HttpURLConnection clientConnection1 =
         tryRequest("csvload?file=census/postsecondary_education.csv");
@@ -150,29 +141,21 @@ public class TestSearchCSVHandler {
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     SearchSuccessResponse response =
         moshi
             .adapter(SearchSuccessResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
-    //    assertEquals(0, response.responseData().data().size());
 
-    //    System.out.println(response);
     assertEquals(0, response.responseMap().data().size());
     assertEquals("success", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
 
     clientConnection.disconnect();
     clientConnection1.disconnect();
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testSearchNotContains() throws IOException {
     HttpURLConnection clientConnection1 =
         tryRequest("csvload?file=census/postsecondary_education.csv");
@@ -182,28 +165,21 @@ public class TestSearchCSVHandler {
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     SearchSuccessResponse response =
         moshi
             .adapter(SearchSuccessResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
 
-    //    System.out.println(response);
     assertEquals(0, response.responseMap().data().size());
     assertEquals("success", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
 
     clientConnection.disconnect();
     clientConnection1.disconnect();
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testSearchNoHeader() throws IOException {
     HttpURLConnection clientConnection1 = tryRequest("csvload?file=census/income_by_race.csv");
     assertEquals(200, clientConnection1.getResponseCode());
@@ -212,30 +188,21 @@ public class TestSearchCSVHandler {
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     SearchSuccessResponse response =
         moshi
             .adapter(SearchSuccessResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
-    //    assertEquals(0, response.responseData().data().size());
-
-    //    System.out.println(response);
 
     assertEquals(40, response.responseMap().data().size());
     assertEquals("success", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
 
     clientConnection.disconnect();
     clientConnection1.disconnect();
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testSearchHeaderName() throws IOException {
     HttpURLConnection clientConnection1 = tryRequest("csvload?file=census/income_by_race.csv");
     assertEquals(200, clientConnection1.getResponseCode());
@@ -244,30 +211,21 @@ public class TestSearchCSVHandler {
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     SearchSuccessResponse response =
         moshi
             .adapter(SearchSuccessResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
-    //    assertEquals(0, response.responseData().data().size());
-
-    //    System.out.println(response);
 
     assertEquals(40, response.responseMap().data().size());
     assertEquals("success", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
 
     clientConnection.disconnect();
     clientConnection1.disconnect();
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testSearchHeaderIndex() throws IOException {
     HttpURLConnection clientConnection1 = tryRequest("csvload?file=census/income_by_race.csv");
     assertEquals(200, clientConnection1.getResponseCode());
@@ -276,22 +234,15 @@ public class TestSearchCSVHandler {
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     SearchSuccessResponse response =
         moshi
             .adapter(SearchSuccessResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
-    //    assertEquals(0, response.responseData().data().size());
-
-    //    System.out.println(response);
 
     assertEquals(40, response.responseMap().data().size());
     assertEquals("success", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
 
     clientConnection.disconnect();
     clientConnection1.disconnect();

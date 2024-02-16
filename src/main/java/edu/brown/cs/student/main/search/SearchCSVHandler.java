@@ -1,7 +1,7 @@
-package edu.brown.cs.student.main.server;
+package edu.brown.cs.student.main.search;
 
-import edu.brown.cs.student.main.search.CSVSearch;
-import edu.brown.cs.student.main.server.SearchSuccessResponse.SearchResponseData;
+import edu.brown.cs.student.main.server.CSVState;
+import edu.brown.cs.student.main.search.SearchSuccessResponse.SearchResponseData;
 import java.util.ArrayList;
 import java.util.List;
 import spark.Request;

@@ -1,8 +1,8 @@
 package edu.brown.cs.student.main;
 
 import edu.brown.cs.student.main.mocks.MockACSAPI;
-import edu.brown.cs.student.main.server.ACSAPIwithCache;
-import edu.brown.cs.student.main.server.ACSDatasource;
+import edu.brown.cs.student.main.ACSDatasource.ACSAPIwithCache;
+import edu.brown.cs.student.main.ACSDatasource.ACSDatasource;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

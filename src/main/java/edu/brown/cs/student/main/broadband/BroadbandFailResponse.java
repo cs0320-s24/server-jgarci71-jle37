@@ -1,8 +1,8 @@
-package edu.brown.cs.student.main.server;
+package edu.brown.cs.student.main.broadband;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import edu.brown.cs.student.main.server.BroadbandSuccessResponse.BroadbandResponseData;
+import edu.brown.cs.student.main.broadband.BroadbandSuccessResponse.BroadbandResponseData;
 
 public record BroadbandFailResponse(String response_type, BroadbandResponseData responseData) {
 

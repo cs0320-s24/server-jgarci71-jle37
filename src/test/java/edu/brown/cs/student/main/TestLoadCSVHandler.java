@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.squareup.moshi.Moshi;
 import edu.brown.cs.student.main.server.CSVState;
-import edu.brown.cs.student.main.server.LoadCSVHandler;
-import edu.brown.cs.student.main.server.SearchCSVHandler;
-import edu.brown.cs.student.main.server.ViewCSVHandler;
+import edu.brown.cs.student.main.load.LoadCSVHandler;
+import edu.brown.cs.student.main.search.SearchCSVHandler;
+import edu.brown.cs.student.main.view.ViewCSVHandler;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;

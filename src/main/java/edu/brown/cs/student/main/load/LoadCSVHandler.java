@@ -1,4 +1,4 @@
-package edu.brown.cs.student.main.server;
+package edu.brown.cs.student.main.load;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -6,6 +6,8 @@ import edu.brown.cs.student.main.parse.CSVParser;
 import edu.brown.cs.student.main.search.SearchObject;
 import java.io.FileReader;
 import java.util.List;
+
+import edu.brown.cs.student.main.server.CSVState;
 import spark.Request;
 import spark.Response;
 import spark.Route;

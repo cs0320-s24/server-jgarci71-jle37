@@ -1,8 +1,8 @@
-package edu.brown.cs.student.main.server;
+package edu.brown.cs.student.main.view;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import edu.brown.cs.student.main.server.ViewSuccessResponse.ViewResponseData;
+import edu.brown.cs.student.main.view.ViewSuccessResponse.ViewResponseData;
 
 public record ViewFailResponse(String response_type, ViewResponseData responseData) {
 

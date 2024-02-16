@@ -22,18 +22,13 @@ import org.junit.jupiter.api.Test;
 import spark.Spark;
 
 /**
- * An INTEGRATION TEST differs from a UNIT TEST in that it's testing a combination of code units and
- * their combined behavior.
- *
- * <p>Test our API server: send real web requests to our server as it is running. Note that for
- * these, we prefer to avoid sending many real API requests to the NWS, and use "mocking" to avoid
- * it. (There are many other reasons to use mock data here. What are they?)
- *
- * <p>In short, there are two new techniques demonstrated here: writing tests that send fake API
- * requests; and testing with mock data / mock objects.
+ * Tests the BroadbandHandler with calls to the ACSAPI
  */
 public class TestBroadbandHandlerAPI {
 
+  /**
+   * Sets the spark port before anything in the test suite is run
+   */
   @BeforeClass
   public static void setupOnce() {
     // Pick an arbitrary free port
@@ -49,7 +44,9 @@ public class TestBroadbandHandlerAPI {
   private JsonAdapter<Map<String, Object>> adapter;
   private JsonAdapter<BroadbandSuccessResponse.BroadbandResponseData> broadbandDataAdapter;
 
-  /** Things to test for: well-formed api call ** missing */
+  /**
+   * Initializes the ACSAPI data
+   */
   @BeforeEach
   public void setup() {
     // Re-initialize parser, state, etc. for every test method
@@ -71,6 +68,9 @@ public class TestBroadbandHandlerAPI {
     Spark.awaitInitialization(); // don't continue until the server is listening
   }
 
+  /**
+   * Clears maps after tests are done running
+   */
   @AfterEach
   public void tearDown() {
     // Gracefully stop Spark listening on both endpoints
@@ -102,6 +102,10 @@ public class TestBroadbandHandlerAPI {
     return clientConnection;
   }
 
+  /**
+   * Tests a successful broadband call
+   * @throws IOException
+   */
   @Test
   public void testBroadbandRequestSuccess() throws IOException {
 
@@ -126,6 +130,10 @@ public class TestBroadbandHandlerAPI {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when county is null
+   * @throws IOException
+   */
   @Test
   public void testBroadbandNoCounty() throws IOException {
 
@@ -143,6 +151,10 @@ public class TestBroadbandHandlerAPI {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when state is null
+   * @throws IOException
+   */
   @Test
   public void testBroadbandNoState() throws IOException {
 
@@ -160,6 +172,10 @@ public class TestBroadbandHandlerAPI {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when no county is specified
+   * @throws IOException
+   */
   @Test
   public void testBroadbandEmptyCounty() throws IOException {
 
@@ -177,6 +193,10 @@ public class TestBroadbandHandlerAPI {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when no state is specified
+   * @throws IOException
+   */
   @Test
   public void testBroadbandEmptyState() throws IOException {
 
@@ -194,6 +214,10 @@ public class TestBroadbandHandlerAPI {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when a state does not exist
+   * @throws IOException
+   */
   @Test
   public void testBroadbandStateDoesNotExist() throws IOException {
 
@@ -211,6 +235,10 @@ public class TestBroadbandHandlerAPI {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when the given county is not found in the state
+   * @throws IOException
+   */
   @Test
   public void testBroadbandCountyNotInState() throws IOException {
 

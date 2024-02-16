@@ -34,6 +34,9 @@ import spark.Spark;
  */
 public class TestBroadbandHandler {
 
+  /**
+   * Sets the spark port before anything in the test suite is run
+   */
   @BeforeClass
   public static void setupOnce() {
     // Pick an arbitrary free port
@@ -49,7 +52,9 @@ public class TestBroadbandHandler {
   private JsonAdapter<Map<String, Object>> adapter;
   private JsonAdapter<BroadbandSuccessResponse.BroadbandResponseData> broadbandDataAdapter;
 
-  /** Things to test for: well-formed api call ** missing */
+  /**
+   * Initializes the mock data to be used in testing
+   */
   @BeforeEach
   public void setup() {
     // Re-initialize parser, state, etc. for every test method
@@ -71,6 +76,9 @@ public class TestBroadbandHandler {
     Spark.awaitInitialization(); // don't continue until the server is listening
   }
 
+  /**
+   * Clears maps after the tests are done
+   */
   @AfterEach
   public void tearDown() {
     // Gracefully stop Spark listening on both endpoints
@@ -102,6 +110,10 @@ public class TestBroadbandHandler {
     return clientConnection;
   }
 
+  /**
+   * Tests a successful broadband api call to the mock data
+   * @throws IOException
+   */
   @Test
   public void testBroadbandRequestSuccess() throws IOException {
 
@@ -126,6 +138,10 @@ public class TestBroadbandHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when county is null
+   * @throws IOException
+   */
   @Test
   public void testBroadbandNoCounty() throws IOException {
 
@@ -143,6 +159,10 @@ public class TestBroadbandHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when state is null
+   * @throws IOException
+   */
   @Test
   public void testBroadbandNoState() throws IOException {
 
@@ -160,6 +180,10 @@ public class TestBroadbandHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when no county is specified
+   * @throws IOException
+   */
   @Test
   public void testBroadbandEmptyCounty() throws IOException {
 
@@ -177,6 +201,10 @@ public class TestBroadbandHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when no state is specified
+   * @throws IOException
+   */
   @Test
   public void testBroadbandEmptyState() throws IOException {
 

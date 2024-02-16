@@ -7,6 +7,10 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * This is the handler for the "/broadband" endpoint. It takes in a datasource to perform queries with given the
+ * expected parameters.
+ */
 public class BroadbandHandler implements Route {
 
   private final ACSDatasource api;
@@ -15,6 +19,13 @@ public class BroadbandHandler implements Route {
     this.api = api;
   }
 
+  /**
+   * Calls on the ACSDataSource to perform a query
+   * @param request
+   * @param response
+   * @return either a BroadBandFailResponse or a BroadBandSuccessResponse
+   * @throws Exception
+   */
   @Override
   public Object handle(Request request, Response response) throws Exception {
     String stateName = request.queryParams("state");
@@ -38,12 +49,6 @@ public class BroadbandHandler implements Route {
     }
     try {
       String[][] theResponse = this.api.query(stateName, countyName);
-      //      for (String[] lis : theResponse) {
-      //        System.out.println();
-      //        for (String s : lis) {
-      //          System.out.print(s + ", ");
-      //        }
-      //      }
       return new BroadbandSuccessResponse(
               new BroadbandResponseData(
                   theResponse[1][0].split(",")[1],

@@ -3,6 +3,10 @@ package edu.brown.cs.student.main.broadband;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
+/**
+ * Represents a successful response for a Broadband endpoint call. Returns a success response type
+ * with the expected data.
+ */
 public record BroadbandSuccessResponse(String response_type, BroadbandResponseData responseMap) {
 
   public record BroadbandResponseData(
@@ -12,6 +16,10 @@ public record BroadbandSuccessResponse(String response_type, BroadbandResponseDa
     this("success", data);
   }
 
+  /**
+   * Converts th BroadBandSuccessResponse into a JSON representation.
+   * @return
+   */
   String serialize() {
     try {
       Moshi moshi = new Moshi.Builder().build();

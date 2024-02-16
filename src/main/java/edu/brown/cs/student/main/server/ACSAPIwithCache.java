@@ -32,12 +32,10 @@ public class ACSAPIwithCache implements ACSDatasource {
   }
 
   public ACSAPIwithCache(long expireAfterWrite, TimeUnit durationType)
-          throws URISyntaxException, IOException, InterruptedException {
+      throws URISyntaxException, IOException, InterruptedException {
     this.apiwithcache = new ACSAPI();
     this.cache =
-            CacheBuilder.newBuilder()
-                    .expireAfterWrite(expireAfterWrite, durationType)
-                    .build(loader);
+        CacheBuilder.newBuilder().expireAfterWrite(expireAfterWrite, durationType).build(loader);
   }
 
   public ACSAPIwithCache(long maxSize, long expireAfterWrite, TimeUnit durationType)
@@ -50,18 +48,16 @@ public class ACSAPIwithCache implements ACSDatasource {
             .build(loader);
   }
 
-
   public String[][] nonCachedQuery(String state, String county) throws IllegalArgumentException {
     System.out.println("performing a non chached query");
     return this.apiwithcache.query(state, county);
-
   }
 
-  public String[][] query(String state, String county) throws IllegalArgumentException, ExecutionException {
+  public String[][] query(String state, String county)
+      throws IllegalArgumentException, ExecutionException {
     return this.cache.get(new StateCountyPair(state.toLowerCase(), county.toLowerCase()));
   }
 
-  //---------DataType------------
+  // ---------DataType------------
   private record StateCountyPair(String state, String county) {}
-
 }

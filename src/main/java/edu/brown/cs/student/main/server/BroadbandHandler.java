@@ -32,7 +32,10 @@ public class BroadbandHandler implements Route {
       Date timeRequested = new Date();
       return new BroadbandSuccessResponse(
               new BroadbandResponseData(
-                  theResponse[1][0].split(",")[1], theResponse[1][0].split(",")[0], theResponse[1][1], timeRequested.toString()))
+                  theResponse[1][0].split(",")[1],
+                  theResponse[1][0].split(",")[0],
+                  theResponse[1][1],
+                  timeRequested.toString()))
           .serialize();
     } catch (IllegalArgumentException e) {
       Date timeRequested = new Date();

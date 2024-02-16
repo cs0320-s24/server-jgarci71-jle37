@@ -4,5 +4,5 @@ import java.util.concurrent.ExecutionException;
 
 public interface ACSDatasource {
 
-    public String[][] query(String state, String county) throws ExecutionException;
+  public String[][] query(String state, String county) throws ExecutionException;
 }

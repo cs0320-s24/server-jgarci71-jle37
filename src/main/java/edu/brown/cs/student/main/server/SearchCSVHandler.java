@@ -2,7 +2,6 @@ package edu.brown.cs.student.main.server;
 
 import edu.brown.cs.student.main.search.CSVSearch;
 import edu.brown.cs.student.main.server.SearchSuccessResponse.SearchResponseData;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import spark.Request;
@@ -26,29 +25,41 @@ public class SearchCSVHandler implements Route {
     String searchToken = request.queryParams("token");
     String targetColumn = request.queryParams("column");
 
+    if (searchToken == null) {
+      return new SearchFailResponse(new SearchResponseData(path, "null", "null", results))
+          .serialize();
+    }
+    if (targetColumn == null) {
+      targetColumn = "";
+    }
+
+    if (this.state.getState() != CSVState.State.LOADED) {
+      return new SearchFailResponse(
+              new SearchResponseData(path, searchToken, targetColumn, results))
+          .serialize();
+    }
+
     try {
       CSVSearch<List<String>> search = new CSVSearch<>(this.state.getLoadResults(), searchToken);
       if (!targetColumn.isEmpty()) {
         int index = Integer.parseInt(targetColumn);
         if (index >= 0) {
           results = (search.searcher(index));
+          return new SearchSuccessResponse(
+                  new SearchResponseData(path, searchToken, targetColumn, results))
+              .serialize();
         }
       } else {
         results = (search.searcher());
+        return new SearchSuccessResponse(new SearchResponseData(path, searchToken, "none", results))
+            .serialize();
       }
-      this.state.fileSuccess();
-      this.state.setFilePath(path);
+    } catch (NumberFormatException e) {
+      results = new CSVSearch<>(this.state.getLoadResults(), searchToken).searcher(targetColumn);
       return new SearchSuccessResponse(
               new SearchResponseData(path, searchToken, targetColumn, results))
           .serialize();
-    } catch (IOException e) {
-      return new SearchFailResponse(
-              new SearchResponseData(path, searchToken, targetColumn, results))
-          .serialize();
-    } catch (NumberFormatException e) {
-      this.state.setResults(
-          new CSVSearch<>(this.state.getLoadResults(), searchToken).searcher(targetColumn));
     }
-    return results;
+    return null;
   }
 }

@@ -1,8 +1,6 @@
 package edu.brown.cs.student.main.search;
 
 import edu.brown.cs.student.main.strategy.CreatorFromRow;
-import edu.brown.cs.student.main.strategy.FactoryFailureException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +22,7 @@ public class CSVSearch<T> {
    *
    * @return
    */
-  public List<List<String>> searcher() throws IOException, FactoryFailureException {
+  public List<List<String>> searcher() {
     useHeader = false;
     return getLists(loadResults, -1);
   }
@@ -35,8 +33,7 @@ public class CSVSearch<T> {
    * @param headerName
    * @return
    */
-  public List<List<String>> searcher(String headerName)
-      throws IOException, FactoryFailureException {
+  public List<List<String>> searcher(String headerName) {
     useHeader = true;
     myObject = new SearchObject();
     List<List<String>> parsedList = loadResults;
@@ -54,7 +51,7 @@ public class CSVSearch<T> {
    * @param headerIndex
    * @return
    */
-  public List<List<String>> searcher(int headerIndex) throws IOException, FactoryFailureException {
+  public List<List<String>> searcher(int headerIndex) {
     useHeader = true;
     myObject = new SearchObject();
     return getLists(loadResults, headerIndex);
@@ -70,7 +67,6 @@ public class CSVSearch<T> {
    */
   public List<List<String>> getLists(List<List<String>> rows, int columnIndex) {
     List<List<String>> results = new ArrayList<>();
-    List<String> prevRow = rows.get(0);
     if (columnIndex == -1) {
       for (int i = 0; i < rows.size(); i++) {
         for (int j = 0; j < rows.get(0).size(); j++) {

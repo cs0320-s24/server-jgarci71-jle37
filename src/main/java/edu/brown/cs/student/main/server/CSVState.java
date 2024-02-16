@@ -3,6 +3,10 @@ package edu.brown.cs.student.main.server;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class representing the shared state for csv load, view, and search calls.
+ * Contains a filepath, loaded state, and results.
+ */
 public class CSVState {
 
   private String filePath = "";

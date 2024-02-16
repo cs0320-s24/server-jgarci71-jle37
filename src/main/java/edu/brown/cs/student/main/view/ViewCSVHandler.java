@@ -6,6 +6,9 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+/**
+ * This is a handler for the "/csvview" endpoint. It displays the data sets.
+ */
 public class ViewCSVHandler implements Route {
   private final CSVState state;
 
@@ -13,6 +16,13 @@ public class ViewCSVHandler implements Route {
     this.state = state;
   }
 
+  /**
+   * Calls on the loaded data and displays it.
+   * @param request
+   * @param response
+   * @return a viewsuccessresponse or viewfailresponse
+   * @throws Exception
+   */
   @Override
   public Object handle(Request request, Response response) throws Exception {
     if (this.state.getState() == CSVState.State.LOADED) {

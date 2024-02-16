@@ -71,6 +71,9 @@ public class TestViewCSVHandler {
    */
   final CSVState currentState = new CSVState();
 
+  /**
+   * Gets and creates new handlers for load, view, and search
+   */
   @BeforeEach
   public void setup() {
     // Re-initialize state, etc. for _every_ test method run
@@ -83,6 +86,9 @@ public class TestViewCSVHandler {
     Spark.awaitInitialization(); // don't continue until the server is listening
   }
 
+  /**
+   * Clears the load, view, and search maps
+   */
   @AfterEach
   public void teardown() {
     // Gracefully stop Spark listening on both endpoints after each test
@@ -113,6 +119,10 @@ public class TestViewCSVHandler {
     return clientConnection;
   }
 
+  /**
+   * Tests a failure when calling view before loading
+   * @throws IOException
+   */
   @Test
   public void testViewBeforeLoad() throws IOException {
     HttpURLConnection clientConnection = tryRequest("csvview");
@@ -132,6 +142,10 @@ public class TestViewCSVHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure when the csv is unsuccessfully loaded
+   * @throws IOException
+   */
   @Test
   public void testViewUnsuccessfulLoad() throws IOException {
     HttpURLConnection clientConnection = tryRequest("csvload?file=malformed/malformed.csv");
@@ -152,6 +166,10 @@ public class TestViewCSVHandler {
     clientConnection1.disconnect();
   }
 
+  /**
+   * Tests a successful call to csvview
+   * @throws IOException
+   */
   @Test
   public void testViewProperFIle() throws IOException {
 

@@ -71,6 +71,9 @@ public class TestSearchCSVHandler {
    */
   final CSVState currentState = new CSVState();
 
+  /**
+   * Gets and creates new handlers for load, view, and search
+   */
   @BeforeEach
   public void setup() {
     // Re-initialize state, etc. for _every_ test method run
@@ -83,6 +86,9 @@ public class TestSearchCSVHandler {
     Spark.awaitInitialization(); // don't continue until the server is listening
   }
 
+  /**
+   * Clears the load, view, and search maps
+   */
   @AfterEach
   public void teardown() {
     // Gracefully stop Spark listening on both endpoints after each test
@@ -113,6 +119,10 @@ public class TestSearchCSVHandler {
     return clientConnection;
   }
 
+  /**
+   * Tests a failure for searching before loading a file
+   * @throws IOException
+   */
   @Test
   public void testSearchBeforeLoad() throws IOException {
     HttpURLConnection clientConnection =
@@ -133,6 +143,10 @@ public class TestSearchCSVHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a successful call for a token that exists but is not in the correct column
+   * @throws IOException
+   */
   @Test
   public void testSearchNotFoundInColumn() throws IOException {
     HttpURLConnection clientConnection1 =
@@ -157,6 +171,10 @@ public class TestSearchCSVHandler {
     clientConnection1.disconnect();
   }
 
+  /**
+   * Tests a successful call with a token that is not found in the csv
+   * @throws IOException
+   */
   @Test
   public void testSearchNotContains() throws IOException {
     HttpURLConnection clientConnection1 =
@@ -181,6 +199,10 @@ public class TestSearchCSVHandler {
     clientConnection1.disconnect();
   }
 
+  /**
+   * Tests a successful call for s search with no header
+   * @throws IOException
+   */
   @Test
   public void testSearchNoHeader() throws IOException {
     HttpURLConnection clientConnection1 = tryRequest("csvload?file=census/income_by_race.csv");
@@ -204,6 +226,10 @@ public class TestSearchCSVHandler {
     clientConnection1.disconnect();
   }
 
+  /**
+   * Tests a successful call with a header name given
+   * @throws IOException
+   */
   @Test
   public void testSearchHeaderName() throws IOException {
     HttpURLConnection clientConnection1 = tryRequest("csvload?file=census/income_by_race.csv");
@@ -227,6 +253,10 @@ public class TestSearchCSVHandler {
     clientConnection1.disconnect();
   }
 
+  /**
+   * Tests a successful call with a header index given
+   * @throws IOException
+   */
   @Test
   public void testSearchHeaderIndex() throws IOException {
     HttpURLConnection clientConnection1 = tryRequest("csvload?file=census/income_by_race.csv");

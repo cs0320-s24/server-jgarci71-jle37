@@ -125,7 +125,7 @@ public class TestSearchCSVHandler {
     assertEquals(0, response.responseData().data().size());
 
     //    System.out.println(response);
-    assertEquals("error", response.response_type());
+    assertEquals("error_datasource", response.response_type());
     // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
     // a real Json reply.
 

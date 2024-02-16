@@ -64,13 +64,13 @@ public class LoadCSVHandler implements Route {
 
     if (filePath == null) {
       LoadResponseData data = new LoadResponseData("null");
-      return new LoadFailResponse(data).serialize();
+      return new LoadFailResponse("error_bad_request", data).serialize();
     }
 
     String path = "data/" + filePath;
     if (path.contains("..")) {
       LoadResponseData data = new LoadResponseData(path);
-      return new LoadFailResponse(data).serialize();
+      return new LoadFailResponse("error_bad_request", data).serialize();
     }
 
     try {
@@ -81,7 +81,7 @@ public class LoadCSVHandler implements Route {
       this.state.setFilePath(path);
       return new LoadSuccessResponse(new LoadResponseData(path)).serialize();
     } catch (Exception e) {
-      return new LoadFailResponse(new LoadResponseData(path)).serialize();
+      return new LoadFailResponse("error_datasource", new LoadResponseData(path)).serialize();
     }
   }
 }

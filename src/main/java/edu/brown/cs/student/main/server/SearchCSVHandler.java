@@ -20,13 +20,14 @@ public class SearchCSVHandler implements Route {
     // here we will call our parse,
     List<List<String>> results = new ArrayList<>();
 
-    String filePath = request.queryParams("file");
-    String path = "data/" + filePath;
+    //    String filePath = request.queryParams("file");
+    String path = this.state.getFilePath();
     String searchToken = request.queryParams("token");
     String targetColumn = request.queryParams("column");
 
     if (searchToken == null) {
-      return new SearchFailResponse(new SearchResponseData(path, "null", "null", results))
+      return new SearchFailResponse(
+              "error_bad_request", new SearchResponseData(path, "null", "null", results))
           .serialize();
     }
     if (targetColumn == null) {
@@ -35,7 +36,7 @@ public class SearchCSVHandler implements Route {
 
     if (this.state.getState() != CSVState.State.LOADED) {
       return new SearchFailResponse(
-              new SearchResponseData(path, searchToken, targetColumn, results))
+              "error_datasource", new SearchResponseData(path, searchToken, targetColumn, results))
           .serialize();
     }
 

@@ -21,6 +21,7 @@ public class ViewCSVHandler implements Route {
           .serialize();
     } else {
       return new ViewFailResponse(
+              "error_datasource",
               new ViewSuccessResponse.ViewResponseData(this.state.getFilePath(), new ArrayList<>()))
           .serialize();
     }

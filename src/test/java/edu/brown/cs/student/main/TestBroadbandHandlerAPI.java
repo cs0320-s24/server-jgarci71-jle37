@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import edu.brown.cs.student.main.mocks.MockACSAPI;
+import edu.brown.cs.student.main.server.ACSAPI;
 import edu.brown.cs.student.main.server.ACSDatasource;
 import edu.brown.cs.student.main.server.BroadbandHandler;
 import edu.brown.cs.student.main.server.BroadbandSuccessResponse;
@@ -32,7 +32,7 @@ import spark.Spark;
  * <p>In short, there are two new techniques demonstrated here: writing tests that send fake API
  * requests; and testing with mock data / mock objects.
  */
-public class TestBroadbandHandler {
+public class TestBroadbandHandlerAPI {
 
   @BeforeClass
   public static void setupOnce() {
@@ -66,8 +66,8 @@ public class TestBroadbandHandler {
       {"NAME", "S2802_C03_022E", "state", "county"},
       {"Los Angeles County, California", "79.7", "06", "12"}
     };
-    ACSDatasource mockedSource = new MockACSAPI(data);
-    Spark.get("/broadband", new BroadbandHandler(mockedSource));
+    ACSDatasource apiSource = new ACSAPI();
+    Spark.get("/broadband", new BroadbandHandler(apiSource));
     Spark.awaitInitialization(); // don't continue until the server is listening
   }
 
@@ -120,7 +120,7 @@ public class TestBroadbandHandler {
     // the response map should ALWAYS return this because our BroadBand Handler is using
     // the mock data passed in during setup
     assertEquals("Los Angeles County", response.responseMap().county());
-    assertEquals("79.7", response.responseMap().percentage());
+    assertEquals("89.9", response.responseMap().percentage());
     assertEquals("California", response.responseMap().state().trim());
 
     clientConnection.disconnect();
@@ -182,6 +182,40 @@ public class TestBroadbandHandler {
 
     // ONE IMPORTANT THING DON'T USE SPACES FOR THE API CALLS USE %20
     HttpURLConnection clientConnection = tryRequest("broadband?state=");
+    assertEquals(200, clientConnection.getResponseCode());
+    Moshi moshi = new Moshi.Builder().build();
+    BroadbandSuccessResponse response =
+        moshi
+            .adapter(BroadbandSuccessResponse.class)
+            .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
+
+    assertEquals("error_bad_request", response.response_type());
+
+    clientConnection.disconnect();
+  }
+
+  @Test
+  public void testBroadbandStateDoesNotExist() throws IOException {
+
+    // ONE IMPORTANT THING DON'T USE SPACES FOR THE API CALLS USE %20
+    HttpURLConnection clientConnection = tryRequest("broadband?state=China&county=Los%20Angeles");
+    assertEquals(200, clientConnection.getResponseCode());
+    Moshi moshi = new Moshi.Builder().build();
+    BroadbandSuccessResponse response =
+        moshi
+            .adapter(BroadbandSuccessResponse.class)
+            .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
+
+    assertEquals("error_bad_request", response.response_type());
+
+    clientConnection.disconnect();
+  }
+
+  @Test
+  public void testBroadbandCountyNotInState() throws IOException {
+
+    // ONE IMPORTANT THING DON'T USE SPACES FOR THE API CALLS USE %20
+    HttpURLConnection clientConnection = tryRequest("broadband?state=California&county=Gwinnett");
     assertEquals(200, clientConnection.getResponseCode());
     Moshi moshi = new Moshi.Builder().build();
     BroadbandSuccessResponse response =

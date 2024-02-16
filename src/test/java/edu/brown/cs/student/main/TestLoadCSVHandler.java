@@ -108,165 +108,114 @@ public class TestLoadCSVHandler {
     return clientConnection;
   }
 
-  // Test proper file **
-  // Test malformed
-  // Test no file **
-  // Test does not exist **
-  // Test exists but wrong location **
-  // Test path contains .. **
-  // Test file not in data folder
-
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testLoadNoFile() throws IOException {
     HttpURLConnection clientConnection = tryRequest("csvload");
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     LoadCSVHandler.LoadFailResponse response =
         moshi
             .adapter(LoadCSVHandler.LoadFailResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
 
-    System.out.println(response);
-    assertEquals("error", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
+    assertEquals("error_bad_request", response.response_type());
 
     clientConnection.disconnect();
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testLoadFileDoesNotExist() throws IOException {
     HttpURLConnection clientConnection = tryRequest("csvload?file=census/does_not_exist.csv");
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     LoadCSVHandler.LoadFailResponse response =
         moshi
             .adapter(LoadCSVHandler.LoadFailResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
 
-    System.out.println(response);
-    assertEquals("error", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
+    assertEquals("error_datasource", response.response_type());
 
     clientConnection.disconnect();
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testLoadFileContainsDoubleDot() throws IOException {
     HttpURLConnection clientConnection =
         tryRequest("csvload?file=census/../../forbiddenData/census/income_by_race.csv");
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     LoadCSVHandler.LoadFailResponse response =
         moshi
             .adapter(LoadCSVHandler.LoadFailResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
 
-    System.out.println(response);
-    assertEquals("error", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
+    assertEquals("error_bad_request", response.response_type());
 
     clientConnection.disconnect();
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testLoadFileWrongLocation() throws IOException {
     HttpURLConnection clientConnection = tryRequest("csvload?file=stars/income_by_race.csv");
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     LoadCSVHandler.LoadFailResponse response =
         moshi
             .adapter(LoadCSVHandler.LoadFailResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
 
-    System.out.println(response);
-    assertEquals("error", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
+    assertEquals("error_datasource", response.response_type());
 
     clientConnection.disconnect();
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testLoadMalformed() throws IOException {
     HttpURLConnection clientConnection = tryRequest("csvload?file=malformed/malformed.csv");
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
     Moshi moshi = new Moshi.Builder().build();
-    // We'll use okio's Buffer class here
+
     LoadCSVHandler.LoadFailResponse response =
         moshi
             .adapter(LoadCSVHandler.LoadFailResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
 
-    System.out.println(response);
-    assertEquals("error", response.response_type());
-    // ^ If that succeeds, we got the expected response. Notice that this is *NOT* an exception, but
-    // a real Json reply.
+    assertEquals("error_datasource", response.response_type());
 
     clientConnection.disconnect();
   }
 
   @Test
-  // Recall that the "throws IOException" doesn't signify anything but acknowledgement to the type
-  // checker
   public void testLoadProperFIle() throws IOException {
 
     HttpURLConnection clientConnection = tryRequest("csvload?file=census/income_by_race.csv");
     // Get an OK response (the *connection* worked, the *API* provides an error response)
     assertEquals(200, clientConnection.getResponseCode());
 
-    // Now we need to see whether we've got the expected Json response.
-    // SoupAPIUtilities handles ingredient lists, but that's not what we've got here.
-    // NOTE:   (How could we reduce the code repetition?)
     Moshi moshi = new Moshi.Builder().build();
 
-    // We'll use okio's Buffer class here
-    System.out.println(clientConnection.getInputStream());
     LoadCSVHandler.LoadSuccessResponse response =
         moshi
             .adapter(LoadCSVHandler.LoadSuccessResponse.class)
             .fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
 
-    //      Map<String, Object> result = (Map<String, Object>) response.responseMap().;
-    //      System.out.println(result.get("ingredients"));
     assertEquals("data/census/income_by_race.csv", response.responseMap().filepath());
     assertEquals("success", response.response_type());
+
     clientConnection.disconnect();
   }
 }

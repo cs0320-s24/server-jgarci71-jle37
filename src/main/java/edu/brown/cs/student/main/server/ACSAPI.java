@@ -14,7 +14,7 @@ public class ACSAPI implements ACSDatasource {
 
   private final HashMap<String, String> stateData;
 
-  public ACSAPI() throws URISyntaxException, IOException, InterruptedException {
+  public ACSAPI() {
     this.stateData = this.mapify(deserialize(sendRequest()));
   }
 
@@ -39,21 +39,24 @@ public class ACSAPI implements ACSDatasource {
     }
   }
 
-  private String sendRequest() throws URISyntaxException, IOException, InterruptedException {
+  private String sendRequest() {
     // Build a request to this BoredAPI. Try out this link in your browser, what do you see?
     // on participant number?
-    HttpRequest censusApiRequest =
-        HttpRequest.newBuilder()
-            .uri(new URI("https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*"))
-            .GET()
-            .build();
-
-    // Send that API request then store the response in this variable. Note the generic type.
-    HttpResponse<String> censusApiResponse =
-        HttpClient.newBuilder()
-            .build()
-            .send(censusApiRequest, HttpResponse.BodyHandlers.ofString());
-    return censusApiResponse.body();
+    try {
+      HttpRequest censusApiRequest =
+          HttpRequest.newBuilder()
+              .uri(new URI("https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*"))
+              .GET()
+              .build();
+      // Send that API request then store the response in this variable. Note the generic type.
+      HttpResponse<String> censusApiResponse =
+          HttpClient.newBuilder()
+              .build()
+              .send(censusApiRequest, HttpResponse.BodyHandlers.ofString());
+      return censusApiResponse.body();
+    } catch (URISyntaxException | IOException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override

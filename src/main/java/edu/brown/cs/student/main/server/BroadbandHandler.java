@@ -21,14 +21,16 @@ public class BroadbandHandler implements Route {
     Date timeRequested = new Date();
     // if county does not exist throw error
     // if county is not given then do all counties
-    if (stateName == null) {
+    if (stateName == null || stateName.isEmpty()) {
       return new BroadbandFailResponse(
+              "error_bad_request",
               new BroadbandResponseData(
                   "missing stateName", "unparsed", "stateName is null", timeRequested.toString()))
           .serialize();
     }
-    if (countyName == null) {
+    if (countyName == null || countyName.isEmpty()) {
       return new BroadbandFailResponse(
+              "error_bad_request",
               new BroadbandResponseData(
                   stateName, "missing", "countyName is null", timeRequested.toString()))
           .serialize();
@@ -50,6 +52,7 @@ public class BroadbandHandler implements Route {
           .serialize();
     } catch (IllegalArgumentException e) {
       return new BroadbandFailResponse(
+              "error_bad_request",
               new BroadbandResponseData(
                   stateName, countyName, e.getMessage(), timeRequested.toString()))
           .serialize();

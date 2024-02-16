@@ -39,6 +39,9 @@ import spark.Spark;
  */
 public class TestLoadCSVHandler {
 
+  /**
+   * Sets the spark port before anything in the test suite is run
+   */
   @BeforeClass
   public static void setup_before_everything() {
     // Set the Spark port number. This can only be done once, and has to
@@ -66,6 +69,9 @@ public class TestLoadCSVHandler {
    */
   final CSVState currentState = new CSVState();
 
+  /**
+   * Gets and creates new handlers for load, view, and search
+   */
   @BeforeEach
   public void setup() {
     // Re-initialize state, etc. for _every_ test method run
@@ -78,6 +84,9 @@ public class TestLoadCSVHandler {
     Spark.awaitInitialization(); // don't continue until the server is listening
   }
 
+  /**
+   * Clears maps for load, view, and search
+   */
   @AfterEach
   public void teardown() {
     // Gracefully stop Spark listening on both endpoints after each test
@@ -108,6 +117,10 @@ public class TestLoadCSVHandler {
     return clientConnection;
   }
 
+  /**
+   * Tests a failure for csvload when no filepath is given
+   * @throws IOException
+   */
   @Test
   public void testLoadNoFile() throws IOException {
     HttpURLConnection clientConnection = tryRequest("csvload");
@@ -126,6 +139,10 @@ public class TestLoadCSVHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when the file does not exist
+   * @throws IOException
+   */
   @Test
   public void testLoadFileDoesNotExist() throws IOException {
     HttpURLConnection clientConnection = tryRequest("csvload?file=census/does_not_exist.csv");
@@ -144,6 +161,10 @@ public class TestLoadCSVHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when file is outside of data package
+   * @throws IOException
+   */
   @Test
   public void testLoadFileContainsDoubleDot() throws IOException {
     HttpURLConnection clientConnection =
@@ -163,6 +184,10 @@ public class TestLoadCSVHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when file exists but is located in the wrong package
+   * @throws IOException
+   */
   @Test
   public void testLoadFileWrongLocation() throws IOException {
     HttpURLConnection clientConnection = tryRequest("csvload?file=stars/income_by_race.csv");
@@ -181,6 +206,10 @@ public class TestLoadCSVHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a failure for when a malformed file is given
+   * @throws IOException
+   */
   @Test
   public void testLoadMalformed() throws IOException {
     HttpURLConnection clientConnection = tryRequest("csvload?file=malformed/malformed.csv");
@@ -199,6 +228,10 @@ public class TestLoadCSVHandler {
     clientConnection.disconnect();
   }
 
+  /**
+   * Tests a successful csvload call
+   * @throws IOException
+   */
   @Test
   public void testLoadProperFIle() throws IOException {
 

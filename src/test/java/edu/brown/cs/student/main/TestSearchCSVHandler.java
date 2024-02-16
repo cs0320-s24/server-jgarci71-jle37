@@ -41,6 +41,9 @@ import spark.Spark;
  */
 public class TestSearchCSVHandler {
 
+  /**
+   * Sets the spark port before anything in the test suite is run
+   */
   @BeforeClass
   public static void setup_before_everything() {
     // Set the Spark port number. This can only be done once, and has to
